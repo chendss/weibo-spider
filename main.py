@@ -1,8 +1,7 @@
 import api_weibo
-from cookie import get_cookie
 
 def main():
-    items = api_weibo.get_uid_list(get_cookie())
-    print(items)
-
+    uid_dict = api_weibo.get_uid_list()
+    value = api_weibo.get_photo_url_by_uid(uid_dict[0]['uid'])
+    print(value)
 main()

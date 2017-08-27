@@ -2,9 +2,12 @@ import data_change
 import regular_weibo
 import requests
 import regular_weibo
+from cookie import get_cookie
 
-def get_body(cookie,url):
-    cookies = data_change.str_to_dict(cookie)
+_cookie = get_cookie()
+
+def get_body(url):
+    cookies = data_change.str_to_dict(_cookie)
     print('cookies:', cookies)
 
     s = requests.session()
@@ -20,9 +23,9 @@ def get_body(cookie,url):
 
 
 
-def get_uid_list(cookie,url='http://weibo.com/p/1005052692248704/myfollow?t=1&cfs=&Pl_Official_RelationMyfollow__111_page=10'):
+def get_uid_list(url='http://weibo.com/p/1005052692248704/myfollow?t=1&cfs=&Pl_Official_RelationMyfollow__111_page=10'):
     '''获得当前页关注人列表'''
-    body = get_body(cookie,url)
+    body = get_body(url)
     regx = regular_weibo.user()
     list_1 = [a.split('\\"')[1].rstrip('&') for a in regx.findall(body)]
     return_value = []
@@ -35,3 +38,12 @@ def get_uid_list(cookie,url='http://weibo.com/p/1005052692248704/myfollow?t=1&cf
         }
         return_value.append(item)
     return return_value
+
+
+def get_photo_url_by_uid (uid):
+    '''获得此用户图片地址'''
+    # url = f'http://photo.weibo.com/{uid}/albums'
+    url = 'http://photo.weibo.com/albums/get_all?uid=3305836581&page=1&count=20&__rnd=1503827709022'
+    body = get_body(url)
+    
+    return body
