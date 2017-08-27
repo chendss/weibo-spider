@@ -4,5 +4,5 @@ from cookie import cookie
 def main():
     items = api_weibo.get_uid_list(cookie)
     print(items)
-    print(items[0]['uid'])
+
 main()

@@ -18,7 +18,10 @@ def get_body(cookie,url):
     # r.encoding='gbk'
     return  r.text
 
+
+
 def get_uid_list(cookie,url='http://weibo.com/p/1005052692248704/myfollow?t=1&cfs=&Pl_Official_RelationMyfollow__111_page=10'):
+    '''获得当前页关注人列表'''
     body = get_body(cookie,url)
     regx = regular_weibo.user()
     list_1 = [a.split('\\"')[1].rstrip('&') for a in regx.findall(body)]
