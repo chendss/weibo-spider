@@ -1,14 +1,16 @@
+import requests
+import json
 import data_change
 import regular_weibo
-import requests
 import regular_weibo
 from cookie import get_cookie
+
 
 _cookie = get_cookie()
 
 def get_body(url):
     cookies = data_change.str_to_dict(_cookie)
-    print('cookies:', cookies)
+    # print('cookies:', cookies)
 
     s = requests.session()
 
@@ -24,26 +26,22 @@ def get_body(url):
 
 
 def get_uid_list(url='http://weibo.com/p/1005052692248704/myfollow?t=1&cfs=&Pl_Official_RelationMyfollow__111_page=10'):
-    '''获得当前页关注人列表'''
+    ''' 
+    获得当前页关注人列表
+    返回一个带着name和uid的列表
+    '''
     body = get_body(url)
     regx = regular_weibo.user()
-    list_1 = [a.split('\\"')[1].rstrip('&') for a in regx.findall(body)]
-    return_value = []
-    for i in list_1:
-        uid = i.split('&')[0].split('=')[1]
-        name = i.split('&')[1].split('=')[1]
-        item = {
-            'uid':uid,
-            'name':name,
-        }
-        return_value.append(item)
-    return return_value
+    uid_name_dict = data_change.name_uid_dict(body,regx)
+    return uid_name_dict
 
 
-def get_photo_url_by_uid (uid):
-    '''获得此用户图片地址'''
-    # url = f'http://photo.weibo.com/{uid}/albums'
-    url = 'http://photo.weibo.com/albums/get_all?uid=3305836581&page=1&count=20&__rnd=1503827709022'
-    body = get_body(url)
-    
-    return body
+def get_photo_urls (uid):
+    '''
+    获得此用户图片专辑地址 
+    uid:微博人id
+    '''
+    rand_time = data_change.get_rand()
+    url = f'http://photo.weibo.com/albums/get_all?uid={uid}&page=1&count=20&__rnd={rand_time}'
+    photo_dict = data_change.photo_album_list(get_body(url),uid)
+    return photo_dict
