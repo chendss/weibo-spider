@@ -23,7 +23,7 @@ def name_uid_dict(body,regx):
     将请求到的body转换成name和uid的字典
     regx:筛选的正则
     '''
-    dict_1 = [a.split('\\"')[1].rstrip('&') for a in regx.findall(body)]
+    dict_1 = [a.split('\\"')[1] for a in regx.findall(body)]
     uid_name_dict = []
     for i in dict_1:
         uid = i.split('&')[0].split('=')[1]
@@ -32,21 +32,28 @@ def name_uid_dict(body,regx):
             'uid':uid,
             'name':name,
         }
+        if item['name'] == '如落雨无声':
+            continue
         uid_name_dict.append(item)
     return uid_name_dict
 
 def photo_album_list(body,uid):
     '''
-    将获得到的body转换成url列表
+    将获得到的body转换成urls和page列表
     uid:当前微博的人的id
     '''
     album_list = json.loads(body)['data']['album_list']
     url_list = []
     for i in album_list:
         album_id = i['album_id']
-        if 'source' in i.keys():
-            url = f'http://photo.weibo.com/{uid}/albums/detail/album_id/{album_id}'
-            url_list.append(url)
-        index_url = f'http://photo.weibo.com/{uid}/talbum/index'
-        url_list.append(index_url)
+        rand_time = get_rand()
+        item = {
+            'urls':[],
+            'page':0,
+        }
+        item['page'] = int( i['count']['photos']/30 ) +1
+        for i in range(1,item['page']+1):
+            url = f'http://photo.weibo.com/photos/get_all?uid={uid}&album_id={album_id}&count=30&page={i}&type=18&__rnd={rand_time}'
+            item['urls'].append(url)
+        url_list.append(item)
     return url_list

@@ -25,12 +25,13 @@ def get_body(url):
 
 
 
-def get_uid_list(url='http://weibo.com/p/1005052692248704/myfollow?t=1&cfs=&Pl_Official_RelationMyfollow__111_page=10'):
+def get_uid_list(page):
     ''' 
     获得当前页关注人列表
     返回一个带着name和uid的列表
     '''
-    body = get_body(url)
+    _url = f'http://weibo.com/p/1005052692248704/myfollow?t=1&cfs=&Pl_Official_RelationMyfollow__93_page={page}#Pl_Official_RelationMyfollow__93'
+    body = get_body(_url)
     regx = regular_weibo.user()
     uid_name_dict = data_change.name_uid_dict(body,regx)
     return uid_name_dict
