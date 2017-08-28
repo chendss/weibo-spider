@@ -1,25 +1,27 @@
 import api_weibo
-import time
 import json
+import time
 
 def main():
-    uid_dict = api_weibo.get_uid_list(1)[0]
-    phots_url = api_weibo.get_photo_urls(uid_dict['uid'])[0]['urls']
-    value = ( api_weibo.get_body(phots_url[0]) )
-    print(value)
-
-
-def get_all_album_dict():
-    '''
-    获得所有关注的人的专辑url
-    '''
-    uid_dict = api_weibo.get_uid_list(1)
-    all_album_list = []
-    for i in uid_dict:
-        #time.sleep(2)
-        photos = api_weibo.get_photo_urls( i['uid'] )
-        print( i['name'] )
-        all_album_list.append(photos)
-    return all_album_list
-
+    index_url = f'https://m.weibo.cn/api/container/getSecond?containerid=1005052692248704_-_FOLLOWERS'
+    index_uid_dict = json.loads (api_weibo.get_body(index_url) )
+    max_page = index_uid_dict['maxPage']
+    uid_dict = []
+    z = 0
+    for i in range(1):
+        url = f'https://m.weibo.cn/api/container/getSecond?containerid=1005052692248704_-_FOLLOWERS&page={i}'
+        t1 = time.time()
+        body = json.loads( api_weibo.get_body(url) )
+        print('请求时间：',time.time()-t1)
+        t1 = time.time()
+        for b in body['cards']:
+            item = {
+                'uid' : b['user']['id'],
+                'name' : b['user']['screen_name'],
+            }
+            uid_dict.append(item)
+    print(uid_dict)
+    uid_json = json.dumps(uid_dict)
+    with open('uid.txt', 'w') as f:
+        f.write(uid_json)
 main()
