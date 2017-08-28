@@ -24,18 +24,27 @@ def get_body(url):
     # r.encoding='gbk'
     return  r.text
 
+def create_uid_name_dict (page=0) :
+    uid_dict = [] 
+    index_url = f'https://m.weibo.cn/api/container/getSecond?containerid=1005052692248704_-_FOLLOWERS'
+    index_uid_dict = json.loads (get_body(index_url) )
+    # 设置请求的页数
+    if page != 0 :
+        max_page = page
+    else :
+        max_page = index_uid_dict['maxPage'] #关注人最大页数
+    #
+    for i in range(max_page+1):
+        url = f'https://m.weibo.cn/api/container/getSecond?containerid=1005052692248704_-_FOLLOWERS&page={i}'
+        body = json.loads( get_body(url) )
+        for b in body['cards']:
+            item = {
+                'uid' : b['user']['id'],
+                'name' : b['user']['screen_name'],
+            }
+            uid_dict.append(item)
+    return uid_dict
 
-
-def get_uid_list(page):
-    ''' 
-    获得当前页关注人列表
-    返回一个带着name和uid的列表
-    '''
-    _url = f'http://weibo.com/p/1005052692248704/myfollow?t=1&cfs=&Pl_Official_RelationMyfollow__93_page={page}#Pl_Official_RelationMyfollow__93'
-    body = get_body(_url)
-    regx = regular_weibo.user()
-    uid_name_dict = data_change.name_uid_dict(body,regx)
-    return uid_name_dict
 
 
 def get_photo_urls (uid):
