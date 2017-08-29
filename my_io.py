@@ -6,7 +6,12 @@ def write_uid(uid_name_dit):
         f.write(uid_json)
 
 def get_txt_dict(path):
-    f = open(f'{path}.txt')
-    text = json.loads(f.read())
-    f.close()
+    with open(f'{path}.txt') as f:
+        text = json.loads(f.read())
     return text
+
+def write_line_list(user_name,_list):
+    print(_list)
+    with open(f'user_dict\\{user_name}.txt','w') as f:
+        for l in _list:
+            f.write(l+'\n')

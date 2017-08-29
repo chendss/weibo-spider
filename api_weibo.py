@@ -1,5 +1,6 @@
 import requests
 import json
+import time
 import data_change
 import regular_weibo
 import regular_weibo
@@ -59,7 +60,13 @@ def get_photo_urls (uid):
 
 def get_album_photo_list(album_url):
     print(album_url)
-    body = get_body(album_url)
+    while True:
+        try:
+            body = get_body(album_url)
+            break
+        except:
+            time.sleep(2)
+            continue
     if body == None:
         return None
     photo_list = json.loads(body)['data']['photo_list']
