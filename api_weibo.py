@@ -56,3 +56,14 @@ def get_photo_urls (uid):
     url = f'http://photo.weibo.com/albums/get_all?uid={uid}&page=1&count=20&__rnd={rand_time}'
     photo_dict = data_change.photo_album_list(get_body(url),uid)
     return photo_dict
+
+def get_album_photo_list(album_url):
+    print(album_url)
+    body = get_body(album_url)
+    if body == None:
+        return None
+    photo_list = json.loads(body)['data']['photo_list']
+    # photo_s = [potot_url['pid'] for potot_url in photo_list]
+    # return_value = data_change.p_ids_to_purl_list(photo_s)
+    # return return_value
+    return photo_list

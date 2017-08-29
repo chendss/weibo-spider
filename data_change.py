@@ -46,6 +46,8 @@ def photo_album_list(body,uid):
     url_list = []
     for i in album_list:
         album_id = i['album_id']
+        _type = i['type']
+        print('这个type的值：',_type)
         rand_time = get_rand()
         item = {
             'urls':[],
@@ -53,7 +55,14 @@ def photo_album_list(body,uid):
         }
         item['page'] = int( i['count']['photos']/30 ) +1
         for i in range(1,item['page']+1):
-            url = f'http://photo.weibo.com/photos/get_all?uid={uid}&album_id={album_id}&count=30&page={i}&type=18&__rnd={rand_time}'
+            url = f'http://photo.weibo.com/photos/get_all?uid={uid}&album_id={album_id}&count=30&page={i}&type={_type}&__rnd={rand_time}'
             item['urls'].append(url)
         url_list.append(item)
     return url_list
+
+def p_ids_to_purl_list(p_ids):
+    purl_list = []
+    for pid in p_ids:
+        url = f'http://wx2.sinaimg.cn/large/{pid}.jpg'
+        purl_list.append(url)
+    return purl_list

@@ -5,7 +5,7 @@ def write_uid(uid_name_dit):
     with open('uid.txt', 'w') as f:
         f.write(uid_json)
 
-def get_uid_name_dict(path):
+def get_txt_dict(path):
     f = open(f'{path}.txt')
     text = json.loads(f.read())
     f.close()
