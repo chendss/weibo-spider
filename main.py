@@ -15,7 +15,7 @@ def get_uid_photo(uid):
 
 def main():
     uid = my_io.get_txt_dict('uid')[0]['uid']
-    p = api_weibo.get_photo_urls(uid)[2]['urls'][0]
+    p = api_weibo.get_photo_urls(uid)[0]['urls'][0]
     value = api_weibo.get_album_photo_list(p)
     print(value)
 main()

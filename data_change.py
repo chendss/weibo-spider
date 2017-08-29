@@ -60,9 +60,9 @@ def photo_album_list(body,uid):
         url_list.append(item)
     return url_list
 
-def p_ids_to_purl_list(p_ids):
+def p_ids_to_purl_list(p_names):
     purl_list = []
-    for pid in p_ids:
-        url = f'http://wx2.sinaimg.cn/large/{pid}.jpg'
+    for p_name in p_names:
+        url = f'http://wx2.sinaimg.cn/large/{p_name}'
         purl_list.append(url)
     return purl_list
